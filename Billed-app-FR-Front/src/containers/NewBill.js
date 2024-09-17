@@ -25,6 +25,10 @@ export default class NewBill {
     formData.append('file', file)
     formData.append('email', email)
 
+    if (file.type === "image/jpeg"){
+
+    }
+
     this.store
       .bills()
       .create({
