@@ -61,3 +61,9 @@ textarea:focus, input:focus, select:focus {
 *[placeholder] {
   color: #0E5AE5 !important;
 }
+
+/* Color & display error message. (Fix: Added file format validation for jpg, jpeg, and png.) */
+#file-error {
+  color: red; 
+  display: none;
+}

@@ -15,20 +15,31 @@ export default class NewBill {
     this.billId = null
     new Logout({ document, localStorage, onNavigate })
   }
+
   handleChangeFile = e => {
     e.preventDefault()
     const file = this.document.querySelector(`input[data-testid="file"]`).files[0]
     const filePath = e.target.value.split(/\\/g)
     const fileName = filePath[filePath.length-1]
+
+    // Fix: Added file format validation for jpg, jpeg, and png.
+    const fileExtension = fileName.split('.').pop().toLowerCase()
+    const validExtensions = ["jpg", "jpeg", "png"]
+
+    const errorElement = this.document.querySelector(`p[data-testid="file-error"]`)
+    errorElement.style.display = "none" // Réinitialiser le message d'erreur
+  
+    if (!validExtensions.includes(fileExtension)) {
+      errorElement.style.display = "block" // Afficher le message d'erreur en rouge
+      this.document.querySelector(`input[data-testid="file"]`).value = "" // Réinitialiser le champ du fichier
+      return
+    }
+    // End of fix
+  
     const formData = new FormData()
     const email = JSON.parse(localStorage.getItem("user")).email
     formData.append('file', file)
     formData.append('email', email)
-
-    if (file.type === "image/jpeg"){
-
-    }
-
     this.store
       .bills()
       .create({
@@ -43,7 +54,8 @@ export default class NewBill {
         this.fileUrl = fileUrl
         this.fileName = fileName
       }).catch(error => console.error(error))
-  }
+  }  
+
   handleSubmit = e => {
     e.preventDefault()
     console.log('e.target.querySelector(`input[data-testid="datepicker"]`).value', e.target.querySelector(`input[data-testid="datepicker"]`).value)
