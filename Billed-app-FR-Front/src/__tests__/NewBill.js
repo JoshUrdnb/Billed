@@ -87,4 +87,28 @@ describe("Given I am connected as an employee", () => {
     })
   })
 
+  describe("When I submit the form", () => {
+    test("Then handleSubmit should be called", async () => {
+      // Setup: Render the NewBill page UI
+      document.body.innerHTML = NewBillUI()
+  
+      // Mock the behavior of localStorage and onNavigate
+      const onNavigate = jest.fn()
+      const store = mockStore
+      const newBill = new NewBill({ document, onNavigate, store, localStorage: window.localStorage })
+  
+      // Simuler l'événement submit sur le formulaire
+      const formNewBill = screen.getByTestId("form-new-bill")
+      const handleSubmit = jest.fn((e) => newBill.handleSubmit(e))
+      formNewBill.addEventListener("submit", handleSubmit)
+  
+      // Simuler le clic sur le bouton "Envoyer"
+      const submitButton = screen.getByText("Envoyer")
+      userEvent.click(submitButton)
+  
+      // Vérifier que handleSubmit a bien été appelé
+      expect(handleSubmit).toHaveBeenCalled()
+    })
+  })
+
 })
