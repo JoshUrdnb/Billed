@@ -60,4 +60,31 @@ describe("Given I am connected as an employee", () => {
     })
   })
 
+  describe("When I upload a file in the correct format (jpg, jpeg, png)", () => {
+    test("Then the file name should be displayed correctly", async () => {
+      // Setup: Render the NewBill page UI
+      document.body.innerHTML = NewBillUI()
+  
+      // Mock the behavior of localStorage and onNavigate
+      const onNavigate = jest.fn()
+      const store = mockStore
+      const newBill = new NewBill({ document, onNavigate, store, localStorage: window.localStorage })
+  
+      // Simuler l'ajout d'un fichier valide
+      const fileInput = screen.getByTestId("file")
+      const file = new File(['(file content)'], 'testFile.jpg', { type: 'image/jpg' })
+  
+      // Simuler l'événement "change" sur l'input de fichier
+      const handleChangeFile = jest.fn((e) => newBill.handleChangeFile(e))
+      fileInput.addEventListener("change", handleChangeFile)
+      userEvent.upload(fileInput, file)
+  
+      // Vérifier que handleChangeFile a bien été appelé
+      expect(handleChangeFile).toHaveBeenCalled()
+  
+      // Vérifier que le fichier a été correctement sélectionné et que le nom est mis à jour
+      expect(fileInput.files[0].name).toBe('testFile.jpg')
+    })
+  })
+
 })
