@@ -22,7 +22,7 @@ export default class NewBill {
     const filePath = e.target.value.split(/\\/g)
     const fileName = filePath[filePath.length-1]
 
-    // Fix: Added file format validation for jpg, jpeg, and png.
+    // Fix : Added file format validation for jpg, jpeg, and png.
     const fileExtension = fileName.split('.').pop().toLowerCase()
     const validExtensions = ["jpg", "jpeg", "png"]
 
