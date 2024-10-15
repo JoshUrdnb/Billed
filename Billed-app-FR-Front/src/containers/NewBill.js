@@ -29,6 +29,9 @@ export default class NewBill {
     const errorElement = this.document.querySelector(`p[data-testid="file-error"]`)
     errorElement.style.display = "none" // Réinitialiser le message d'erreur
   
+    console.log("extension" + fileExtension)
+    console.log("fichier" + filePath)
+
     if (!validExtensions.includes(fileExtension)) {
       errorElement.style.display = "block" // Afficher le message d'erreur en rouge
       this.document.querySelector(`input[data-testid="file"]`).value = "" // Réinitialiser le champ du fichier

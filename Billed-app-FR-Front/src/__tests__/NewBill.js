@@ -1,7 +1,7 @@
 /**
  * @jest-environment jsdom
  */
-import {screen, waitFor, fireEvent} from "@testing-library/dom"
+import { screen, waitFor, fireEvent } from "@testing-library/dom"
 import NewBillUI from "../views/NewBillUI.js"
 import NewBill from "../containers/NewBill.js"
 import { localStorageMock } from "../__mocks__/localStorage.js";
@@ -64,24 +64,31 @@ describe("Given I am connected as an employee", () => {
     test("Then the file name should be displayed correctly", async () => {
       // Setup: Render the NewBill page UI
       document.body.innerHTML = NewBillUI()
-  
+
       // Mock the behavior of localStorage and onNavigate
       const onNavigate = jest.fn()
       const store = mockStore
+
+      Object.defineProperty(window, 'localStorage', { value: localStorageMock })
+      window.localStorage.setItem('user', JSON.stringify({
+        type: 'Employee'
+      }))
+
       const newBill = new NewBill({ document, onNavigate, store, localStorage: window.localStorage })
-  
+
       // Simuler l'ajout d'un fichier valide
       const fileInput = screen.getByTestId("file")
       const file = new File(['(file content)'], 'testFile.jpg', { type: 'image/jpg' })
-  
+
       // Simuler l'événement "change" sur l'input de fichier
       const handleChangeFile = jest.fn((e) => newBill.handleChangeFile(e))
       fileInput.addEventListener("change", handleChangeFile)
       userEvent.upload(fileInput, file)
-  
+      // fireEvent.change(fileInput, { target: { files: [file] } });
+
       // Vérifier que handleChangeFile a bien été appelé
       expect(handleChangeFile).toHaveBeenCalled()
-  
+
       // Vérifier que le fichier a été correctement sélectionné et que le nom est mis à jour
       expect(fileInput.files[0].name).toBe('testFile.jpg')
     })
@@ -91,24 +98,34 @@ describe("Given I am connected as an employee", () => {
     test("Then handleSubmit should be called", async () => {
       // Setup: Render the NewBill page UI
       document.body.innerHTML = NewBillUI()
-  
+
       // Mock the behavior of localStorage and onNavigate
       const onNavigate = jest.fn()
       const store = mockStore
       const newBill = new NewBill({ document, onNavigate, store, localStorage: window.localStorage })
-  
+
       // Simuler l'événement submit sur le formulaire
       const formNewBill = screen.getByTestId("form-new-bill")
       const handleSubmit = jest.fn((e) => newBill.handleSubmit(e))
       formNewBill.addEventListener("submit", handleSubmit)
-  
+
       // Simuler le clic sur le bouton "Envoyer"
       const submitButton = screen.getByText("Envoyer")
       userEvent.click(submitButton)
-  
+
       // Vérifier que handleSubmit a bien été appelé
       expect(handleSubmit).toHaveBeenCalled()
     })
   })
 
+})
+
+// Méthode POST de NewBill
+describe("When I am on NewBill Page and I submit a new bill", () => {
+  test("Then the bill should be posted to the API POST", async () => {
+    document.body.innerHTML = NewBillUI()
+    window.onNavigate(ROUTES_PATH.NewBill)
+    const bill = await mockStore.bills().create();
+    expect(bill.key).toBe("1234");
+  })
 })
