@@ -33,33 +33,6 @@ describe("Given I am connected as an employee", () => {
     })
   })
 
-  // describe("When I am on NewBill Page", () => {
-  //   test("Then all form inputs should be present", async () => {
-  //     // Setup: Render the NewBill page UI
-  //     document.body.innerHTML = NewBillUI()
-
-  //     // Vérifier que tous les inputs nécessaires sont présents
-  //     const expenseType = screen.getByTestId("expense-type")
-  //     const expenseName = screen.getByTestId("expense-name")
-  //     const datepicker = screen.getByTestId("datepicker")
-  //     const amount = screen.getByTestId("amount")
-  //     const vat = screen.getByTestId("vat")
-  //     const pct = screen.getByTestId("pct")
-  //     const commentary = screen.getByTestId("commentary")
-  //     const file = screen.getByTestId("file")
-
-  //     // Tests pour s'assurer que chaque élément est présent dans le DOM
-  //     expect(expenseType).toBeTruthy()
-  //     expect(expenseName).toBeTruthy()
-  //     expect(datepicker).toBeTruthy()
-  //     expect(amount).toBeTruthy()
-  //     expect(vat).toBeTruthy()
-  //     expect(pct).toBeTruthy()
-  //     expect(commentary).toBeTruthy()
-  //     expect(file).toBeTruthy()
-  //   })
-  // })
-
   describe("When I upload a file in the correct format (jpg, jpeg, png)", () => {
     test("Then the file name should be displayed correctly", async () => {
       // Setup: Render the NewBill page UI
