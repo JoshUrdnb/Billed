@@ -33,37 +33,37 @@ describe("Given I am connected as an employee", () => {
     })
   })
 
-  describe("When I upload a file in the correct format (jpg, jpeg, png)", () => {
-    test("Then the file name should be displayed correctly", async () => {
+  describe("When I upload a file in an incorrect format (e.g. txt)", () => {
+    test("Then an error message should be displayed", async () => {
       // Setup: Render the NewBill page UI
       document.body.innerHTML = NewBillUI()
-
+  
       // Mock the behavior of localStorage and onNavigate
       const onNavigate = jest.fn()
       const store = mockStore
-
+  
       Object.defineProperty(window, 'localStorage', { value: localStorageMock })
       window.localStorage.setItem('user', JSON.stringify({
         type: 'Employee'
       }))
-
+  
       const newBill = new NewBill({ document, onNavigate, store, localStorage: window.localStorage })
-
-      // Simuler l'ajout d'un fichier valide
+  
+      // Simuler l'ajout d'un fichier invalide
       const fileInput = screen.getByTestId("file")
-      const file = new File(['(file content)'], 'testFile.jpg', { type: 'image/jpg' })
-
+      const file = new File(['(file content)'], 'testFile.txt', { type: 'text/plain' })
+  
       // Simuler l'événement "change" sur l'input de fichier
       const handleChangeFile = jest.fn((e) => newBill.handleChangeFile(e))
       fileInput.addEventListener("change", handleChangeFile)
       userEvent.upload(fileInput, file)
-      // fireEvent.change(fileInput, { target: { files: [file] } });
-
+  
       // Vérifier que handleChangeFile a bien été appelé
       expect(handleChangeFile).toHaveBeenCalled()
-
-      // Vérifier que le fichier a été correctement sélectionné et que le nom est mis à jour
-      expect(fileInput.files[0].name).toBe('testFile.jpg')
+  
+      // Vérifier que le message d'erreur est affiché
+      const errorMessage = screen.getByTestId('file-error')
+      expect(errorMessage.style.display).toBe("block")
     })
   })
 
