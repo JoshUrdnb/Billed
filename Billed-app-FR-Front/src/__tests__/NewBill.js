@@ -33,6 +33,44 @@ describe("Given I am connected as an employee", () => {
     })
   })
 
+  describe("When I upload a file in a correct format (jpg, jpeg, png)", () => {
+    test("Then no error message should be displayed, and the file should be uploaded", async () => {
+      // Setup: Render the NewBill page UI
+      document.body.innerHTML = NewBillUI()
+  
+      const onNavigate = jest.fn()
+      const store = mockStore
+  
+      // Simuler la connexion d'un utilisateur de type 'Employee'
+      Object.defineProperty(window, 'localStorage', { value: localStorageMock })
+      window.localStorage.setItem('user', JSON.stringify({
+        type: 'Employee'
+      }))
+  
+      const newBill = new NewBill({ document, onNavigate, store, localStorage: window.localStorage })
+  
+      // Vérifier que l'état initial du message d'erreur est bien "none" via getComputedStyle
+      const errorMessage = screen.getByTestId('file-error')
+      // expect(getComputedStyle(errorMessage).display).toBe("none")
+      expect(errorMessage.classList.contains('hidden')).toBe(true)
+  
+      // Simuler l'ajout d'un fichier valide
+      const fileInput = screen.getByTestId("file")
+      const file = new File(['(file content)'], 'testFile.png', { type: 'image/png' })
+  
+      // Simuler l'événement "change" sur l'input de fichier
+      const handleChangeFile = jest.fn((e) => newBill.handleChangeFile(e))
+      fileInput.addEventListener("change", handleChangeFile)
+      userEvent.upload(fileInput, file)
+  
+      // Vérifier que handleChangeFile a bien été appelé
+      expect(handleChangeFile).toHaveBeenCalled()
+  
+      // Vérifier que le message d'erreur n'est toujours pas affiché après avoir uploadé un fichier valide
+      expect(getComputedStyle(errorMessage).display).toBe("none")
+    })
+  })      
+
   describe("When I upload a file in an incorrect format (e.g. txt)", () => {
     test("Then an error message should be displayed", async () => {
       // Setup: Render the NewBill page UI

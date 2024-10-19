@@ -24,6 +24,9 @@ export default class NewBill {
 
     // Fix : Added file format validation for jpg, jpeg, and png.
     const fileExtension = fileName.split('.').pop().toLowerCase()
+    console.log('File Name:', fileName)
+    console.log('File Extension:', fileExtension)
+    
     const validExtensions = ["jpg", "jpeg", "png"]
 
     const errorElement = this.document.querySelector(`p[data-testid="file-error"]`)
@@ -33,6 +36,7 @@ export default class NewBill {
     console.log("fichier" + filePath)
 
     if (!validExtensions.includes(fileExtension)) {
+      console.log('Invalid file extension!')
       errorElement.style.display = "block" // Afficher le message d'erreur en rouge
       this.document.querySelector(`input[data-testid="file"]`).value = "" // Réinitialiser le champ du fichier
       return
