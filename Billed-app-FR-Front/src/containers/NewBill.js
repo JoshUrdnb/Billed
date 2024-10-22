@@ -35,7 +35,9 @@ export default class NewBill {
     console.log("extension" + fileExtension)
     console.log("fichier" + filePath)
 
-    if (!validExtensions.includes(fileExtension)) {
+    if (!file || (file.type != "image/jpeg" &&
+      file.type !== "image/jpg" &&
+      file.type !== "image/png")){
       console.log('Invalid file extension!')
       errorElement.style.display = "block" // Afficher le message d'erreur en rouge
       this.document.querySelector(`input[data-testid="file"]`).value = "" // Réinitialiser le champ du fichier

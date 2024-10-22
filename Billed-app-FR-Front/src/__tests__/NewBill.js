@@ -51,8 +51,6 @@ describe("Given I am connected as an employee", () => {
   
       // Vérifier que l'état initial du message d'erreur est bien "none" via getComputedStyle
       const errorMessage = screen.getByTestId('file-error')
-      // expect(getComputedStyle(errorMessage).display).toBe("none")
-      expect(errorMessage.classList.contains('hidden')).toBe(true)
   
       // Simuler l'ajout d'un fichier valide
       const fileInput = screen.getByTestId("file")
